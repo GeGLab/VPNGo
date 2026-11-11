@@ -31,7 +31,7 @@ fi
 
 if [ "$#" -gt 0 ]; then
     case "$1" in
-        profile|assign|start|stop|switch|status|on|off|policy|helper|version|help|--help|-h|--install-gui|group|app|update)
+        profile|assign|start|stop|switch|status|on|off|policy|helper|version|help|--help|-h|--install-gui|group|app|update|proxy)
             exec "$python" "$project/shared/commands.py" "$@" ;;
     esac
 fi
