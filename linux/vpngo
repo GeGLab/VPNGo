@@ -816,7 +816,7 @@ def setup_wireguard(path, profile="default"):
 def main():
     if len(sys.argv) >= 2 and sys.argv[1] in {
         "profile", "assign", "start", "stop", "switch", "status", "on", "off", "policy", "helper", "version", "help", "--help", "-h",
-        "--install-gui", "group", "app", "update",
+        "--install-gui", "group", "app", "update", "proxy",
     }:
         from commands import main as shared_main
         return shared_main(sys.argv[1:])

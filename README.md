@@ -290,6 +290,9 @@ Keep the original `.conf` files at their registered paths. vpngo stores their pa
 | `vpngo policy <app> dns on\|off` | Set Linux resolver isolation for the next start. Default: off; needs the kill switch and a DNS IP in the profile. |
 | `vpngo helper add <app> <executable>` | Register a known helper executable for Mihomo process matching. |
 | `vpngo shutdown` | Windows: stop all VPNGo process filters and its local proxy; apps remain open and use their usual connection. |
+| `vpngo proxy start <profile> [--json]` | Open a SOCKS5 listener on `127.0.0.1` for one profile and print its port. Mihomo runs the WireGuard tunnel in user space: no TUN, no route or DNS change. Every connection it receives goes through the profile, with no direct fallback; names resolve inside the tunnel. Needs Mihomo on every system. Used by the Annoy app to route chosen servers. |
+| `vpngo proxy stop <profile>` / `vpngo proxy status [--json]` | Close that listener; list the open listeners and their ports. |
+| `vpngo proxy list --json` | Profiles a proxy can use, the version, and why `proxy start` can't run (Mihomo missing), as JSON. |
 | `vpngo version` | Show the installed version (`dev` in a source checkout). |
 | `vpngo update [--check]` | Install the latest release over this one: it downloads the release's installer for your system, checks it against `SHA256SUMS` and runs it; settings and profiles are kept, and a failed update restores the previous version. `--check` only reports whether a newer version exists. Installs from a package manager update with that manager; a source checkout with `git pull`. |
 | `vpngo --install-gui` | Download, verify and install (or upgrade) the [graphical interface](#graphical-interface). |

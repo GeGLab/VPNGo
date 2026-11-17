@@ -15,7 +15,7 @@ from profiles import load as load_profiles, profile_key, register, resolve
 
 PROJECT = Path(__file__).resolve().parent.parent
 GLOBAL_COMMANDS = {"profile", "assign", "start", "stop", "switch", "status", "check", "on", "off", "policy", "helper", "version",
-                   "--install-gui", "group", "app", "update"}
+                   "--install-gui", "group", "app", "update", "proxy"}
 TEMP_FLAGS = {"--temp"}
 DETACH_FLAGS = {"-d", "--detach"}
 
@@ -194,9 +194,9 @@ def main(argv=None):
     if not args:
         return usage()
     command = args[0]
-    if command not in {"version", "help", "--help", "-h", "--install-gui", "update"} and args[1:] != ["--json"]:
+    if command not in {"version", "help", "--help", "-h", "--install-gui", "update", "proxy"} and args[1:] != ["--json"]:
         migrate_profiles()
-    if sys.platform in {"darwin", "win32"} and command not in {"version", "help", "--help", "-h", "--install-gui", "update"}:
+    if sys.platform in {"darwin", "win32"} and command not in {"version", "help", "--help", "-h", "--install-gui", "update", "proxy"}:
         from managed import reconcile_temporary
         reconcile_temporary()
     if command in {"help", "--help", "-h"}:
@@ -219,6 +219,10 @@ def main(argv=None):
     if command == "update" and args[1:] in ([], ["--check"]):
         from self_update import update
         return update(version(), check_only=args[1:] == ["--check"])
+    if command == "proxy":
+        from proxy import command as proxy_command
+        result = proxy_command(args[1:], version())
+        return usage() if result is None else result
     if command == "--install-gui" and len(args) == 1:
         from gui_install import install
         return install()

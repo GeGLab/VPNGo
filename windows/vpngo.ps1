@@ -202,7 +202,7 @@ try {
         }
         exit $ChildExitCode
     }
-    if ($Application -in @('profile','assign','start','stop','switch','status','on','off','policy','helper','version','help','--install-gui','group','app','update')) {
+    if ($Application -in @('profile','assign','start','stop','switch','status','on','off','policy','helper','version','help','--install-gui','group','app','update','proxy')) {
         $CliArgs = @($Application)
         if ($Action) { $CliArgs += $Action }
         if ($Profile) { $CliArgs += $Profile }
