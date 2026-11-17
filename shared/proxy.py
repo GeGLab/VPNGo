@@ -145,11 +145,25 @@ def start(name):
     raise ValueError(f"Mihomo did not open the proxy for profile '{name}'.")
 
 
+def ours(pid, name):
+    """True when pid is still the Mihomo started for this profile, not a process that reused the number."""
+    if not alive(pid):
+        return False
+    config = str(STATE / name / "config.yaml")
+    if os.name == "nt":
+        out = subprocess.run(["powershell", "-NoProfile", "-Command",
+                              f"(Get-CimInstance Win32_Process -Filter 'ProcessId={pid}').CommandLine"],
+                             capture_output=True, text=True, check=False).stdout
+    else:
+        out = subprocess.run(["ps", "-o", "command=", "-p", str(pid)], capture_output=True, text=True, check=False).stdout
+    return config in out
+
+
 def stop(name):
     name = profile_key(name)
     state = read_state(name)
     pid = state.get("pid")
-    if alive(pid):
+    if ours(pid, name):
         if os.name == "nt":
             subprocess.run(["taskkill", "/PID", str(pid), "/T", "/F"], capture_output=True, check=False)
         else:

@@ -78,6 +78,24 @@ class ProxyTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("nope", json.loads(out)["error"])
 
+    def test_stop_leaves_a_process_that_reused_the_pid_alone(self):
+        folder = proxy.STATE / "brasil"
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "state.json").write_text(json.dumps({"pid": os.getpid(), "port": 1}), encoding="utf-8")
+        with patch.object(proxy.os, "kill") as kill, patch.object(proxy.subprocess, "run") as taskkill:
+            taskkill.return_value.stdout = "python3 -m unittest"
+            self.assertEqual(run("stop", "brasil")[0], 0)
+        self.assertFalse(any(c.args[1:] == (proxy.signal.SIGTERM,) for c in kill.call_args_list))
+        self.assertFalse(any("taskkill" in c.args[0] for c in taskkill.call_args_list))
+        self.assertFalse((folder / "state.json").exists())
+
+    def test_help_explains_proxy(self):
+        for words in (["proxy"], ["proxy", "start"]):
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(commands.main(["help", *words]), 0)
+            self.assertIn("vpngo proxy start", out.getvalue())
+
     def test_unknown_subcommand_shows_usage(self):
         with contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(commands.main(["proxy", "jump"]), 2)

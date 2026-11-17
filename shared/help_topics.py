@@ -106,6 +106,17 @@ TOPICS = {
         "config": "Usage: vpngo config <path>\n"
                   "Register an executable, a folder of executables, or a macOS .app bundle.\n"
                   "Use this when the app cannot be found automatically.",
+        "proxy": "Usage: vpngo proxy start <profile> [--json]\n"
+                 "       vpngo proxy stop <profile>\n"
+                 "       vpngo proxy status [--json]\n"
+                 "       vpngo proxy list --json\n"
+                 "Open a SOCKS5 listener on 127.0.0.1 for one profile; Mihomo runs the tunnel in user space.\n"
+                 "No TUN, route or DNS change. Every connection goes through the profile, never direct.\n"
+                 "  start   Open the listener (or reuse the open one) and print its port.\n"
+                 "  stop    Close the profile's listener.\n"
+                 "  status  List the open listeners and their ports.\n"
+                 "  list    Profiles, version and why 'proxy start' can't run, as JSON.\n"
+                 "Needs Mihomo on PATH or VPNGO_MIHOMO. Used by the Annoy app to route chosen servers.",
         "update": "Usage: vpngo update [--check]\n"
                   "Download the latest release from GitHub, check it against SHA256SUMS and install it in place.\n"
                   "Profiles and settings are kept; a failed update restores the previous version.\n"
@@ -217,6 +228,17 @@ TOPICS = {
         "config": "Uso: vpngo config <caminho>\n"
                   "Cadastra um executável, uma pasta de executáveis ou um pacote .app do macOS.\n"
                   "Use quando o app não for encontrado automaticamente.",
+        "proxy": "Uso: vpngo proxy start <perfil> [--json]\n"
+                 "     vpngo proxy stop <perfil>\n"
+                 "     vpngo proxy status [--json]\n"
+                 "     vpngo proxy list --json\n"
+                 "Abre um SOCKS5 em 127.0.0.1 para um perfil; o Mihomo roda o túnel em espaço de usuário.\n"
+                 "Sem TUN, sem mudar rotas ou DNS. Toda conexão passa pelo perfil, nunca direto.\n"
+                 "  start   Abre o listener (ou reaproveita o aberto) e mostra a porta.\n"
+                 "  stop    Fecha o listener do perfil.\n"
+                 "  status  Lista os listeners abertos e suas portas.\n"
+                 "  list    Perfis, versão e por que 'proxy start' não roda, em JSON.\n"
+                 "Precisa do Mihomo no PATH ou em VPNGO_MIHOMO. Usado pelo app Annoy para rotear servidores escolhidos.",
         "update": "Uso: vpngo update [--check]\n"
                   "Baixa a versão mais recente do GitHub, confere com o SHA256SUMS e instala por cima.\n"
                   "Perfis e configurações ficam; se a atualização falhar, a versão anterior volta.\n"
@@ -235,7 +257,8 @@ TOPICS = {
 }
 
 
-ALIASES = {"temp": "--temp", "-d": "detach", "--detach": "detach"}
+ALIASES = {"temp": "--temp", "-d": "detach", "--detach": "detach", "proxy start": "proxy", "proxy stop": "proxy",
+           "proxy status": "proxy", "proxy list": "proxy"}
 
 
 def get(topic):
